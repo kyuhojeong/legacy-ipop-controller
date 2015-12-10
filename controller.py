@@ -94,12 +94,14 @@ class IpopController(observer.Observer):
         if "controller_logging" in CONFIG:
             try:
                 level = getattr(logger, CONFIG["controller_logging"])
+                logger.getLogger().setLevel(level)
             except:
                 # This is for RYU logger. It does not use convernional logger
                 # level such as INFO, DEBUG, ERROR. Rather, it uses lowerletter
                 # such as info, debug and error.
                 level = getattr(logger, CONFIG["controller_logging"].lower())
-            logger.getLogger().setLevel(level)
+                print dir(logger)
+                logger.setLevel(10)
     
         if self.args.ip_config:
             load_peer_ip_config(self.args.ip_config)
@@ -117,9 +119,9 @@ class IpopController(observer.Observer):
         t = controller.run()
     
         # This is not to fall off the main thread
-        if not self.args.child_thread:
-            while run_event.is_set():
-                time.sleep(1)
+        #if not self.args.child_thread:
+        #    while run_event.is_set():
+        #        time.sleep(1)
 
     def on_message(self, msg_type, msg):
         print("on_message type:{0} message:{1}".format(msg_type, msg))

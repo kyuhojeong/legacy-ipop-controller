@@ -41,7 +41,6 @@ class Controller(il.UdpServer):
         logging = logger
         print dir(logging)
         logging.error("what")
-        print logging.getLogger().getEffectiveLevel()
 
         self.uid_ip_table = {}
         parts = CONFIG["ip4"].split(".")
@@ -246,7 +245,7 @@ class Controller(il.UdpServer):
                                                                 False)
                     elif msg_type == "packet_notify":
                         if msg["nw_proto"] == 6:
-                            if msg["ACK"] != 0:
+                            if msg["ack"] != 0:
                                 continue
                         if msg["src_port"] == 68:
                             continue #Ignore BOOTP
