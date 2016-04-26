@@ -635,6 +635,10 @@ class NatSwitch(app_manager.RyuApp):
 
         # This packet comes from the WAN port
         if msg.in_port == self.wan_port:
+            # If it's ARP, just ignores. (NOt correct implementation)
+            # TODO host should replya with proper ARP reply
+            #if eth.ethertype == 2054:
+            #    return;
 
             if not src in self.wan_mac_port_map:
                 self.wan_mac_port_map.append(src)

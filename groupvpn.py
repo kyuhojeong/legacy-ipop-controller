@@ -244,17 +244,20 @@ class Controller(il.UdpServer):
                                 self.ondemand_create_connection(msg["uid"], 
                                                                 False)
                     elif msg_type == "packet_notify":
-                        if msg["nw_proto"] == 6:
-                            if msg["ack"] != 0:
-                                continue
+                        #continue
+                        #if msg["nw_proto"] == 6:
+                        #    if msg["ack"] != 0:
+                        #        continue
                         if msg["src_port"] == 68:
                             continue #Ignore BOOTP
                         if msg["src_port"] == 5353:
                             continue #Ignore Multicast DNS
                         if msg["src_port"] == 30000:
                             continue #Ignore ICC packet 
-                        if msg["nw_proto"] == 17:
-                            continue # Let's ignore UDP for the time being
+                        #if msg["nw_proto"] == 17:
+                        #    continue # Let's ignore UDP for the time being
+                        if not ((msg["src_port"] == 5001) or (msg["dst_port"] == 5001)):
+                            continue #The stream would be only on 5000 for the experiment
 
                         #ryu_msg = {}
                         #ryu_msg["type"] = "packet_notify"
@@ -268,6 +271,7 @@ class Controller(il.UdpServer):
                         src_random_port = random.randint(49125, 65535)
                         dst_random_port = random.randint(49125, 65535)
                         msg_id = random.randint(1, 65535)
+                        logging.debug("msg_id:{0}".format(msg_id))
                         msg["msg_id"] = msg_id
                         msg["src_host_ipv4"] = REMOTE_HOST_IPv4
                         msg["local_host_ipv4"] = LOCAL_HOST_IPv4
@@ -290,6 +294,7 @@ class Controller(il.UdpServer):
                         #msg["type"] = "packet_notify_local"
                         msg["type"] = "packet_notify_local_inbound"
                         PENDING_MSG[msg_id] = msg
+                        logging.debug("pending msg is pushed to dictionary --- {0} ".format(PENDING_MSG[msg_id]))
                         self.observable.send_msg("ocs", "control", msg)
 
                         #ret0 = self.sock.sendto(json.dumps(msg),("::1", 30001))
@@ -348,6 +353,7 @@ class Controller(il.UdpServer):
                         pending_msg["type"] = "packet_notify_local_outbound"
                         self.observable.send_msg("ocs", "control", pending_msg)
                     else :
+                        logging.debug("received a ICC from remote msg_id:{0}".format(msg["msg_id"]))
                         self.observable.send_msg("ocs", "control", msg)
                         ack = {}
                         ack["msg_id"] = msg["msg_id"] 
