@@ -21,6 +21,7 @@ from ryu.lib.packet import udp
 
 from ryu.controller import dpset
 
+import controller
 import commands
 import fcntl
 import imp
@@ -234,7 +235,7 @@ class NatSwitch(app_manager.RyuApp):
             #ipop_tincan_stdout = commands.getoutput(ipop_tincan_stdin)
             #self.logger.info("stdout:" + ipop_tincan_stdout)
             #sys.path.append(IPOP_CONTROLLER_PATH)
-            import controller
+            #import controller
             ipop = controller.IpopController(IPOP_CONFIG_COMMAND_LINE, self.logger)
             ipop.run()
             ocs = OpenflowControllerSlot(observer.Observable(), self);

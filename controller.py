@@ -12,6 +12,7 @@ import signal
 import sys
 import threading
 import time
+import groupvpn as vpn
 
 CONFIG = i.CONFIG
 
@@ -109,10 +110,10 @@ class IpopController(observer.Observer):
     
     def run(self):
         # Start controller thread
-        if CONFIG["controller_type"] == "group_vpn":
-            import groupvpn as vpn
-        elif CONFIG["controller_type"] == "social_vpn":
-            import socialvpn as vpn
+        #if CONFIG["controller_type"] == "group_vpn":
+        #    import groupvpn as vpn
+        #elif CONFIG["controller_type"] == "social_vpn":
+        #    import socialvpn as vpn
     
         run_event.set()
         controller = vpn.Controller(CONFIG, self.logging, self.observable, run_event)

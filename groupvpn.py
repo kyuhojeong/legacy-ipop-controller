@@ -186,7 +186,9 @@ class Controller(il.UdpServer):
                         logging.debug("?? {0} {1} {2}".format(stats[0]["best_conn"], stats[0]["local_type"] , stats[0]["rem_type"]))
                         #if stats[0]["best_conn"] and stats[0]["local_type"] == "local" and stats[0]["rem_type"] == "local":
                         # Amazon AWS instance does not find itself as "local"
-                        if stats[0]["best_conn"]:
+                        if stats[0]["best_conn"] and \
+                          (msg["uid"] == "a62ede8eeee1316f7e10d6523dba9b3ad3d4ce07" or 
+                           msg["uid"] == "345f9be869ab98864af8b7057fa883790a180d91"):  
                             ryu_msg = {}
                             ryu_msg["type"] = "tincan_notify"
 			    ryu_msg["local_addr"] = stats[0]["local_addr"].split(":")[0]
